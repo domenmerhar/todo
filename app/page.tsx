@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="max-w-2xl text-center space-y-8">
         <div className="space-y-4">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
@@ -15,13 +15,13 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div>
+        <div className="flex flex-col gap-2">
           <Link href="/login">
             <Button size="lg" className="text-lg px-8 py-3">
               Get Started
             </Button>
           </Link>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500">
             Ready to begin your journey? Click above to sign in.
           </p>
         </div>
