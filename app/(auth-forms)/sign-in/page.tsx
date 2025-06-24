@@ -21,10 +21,10 @@ export default function Component() {
       <CardHeader>
         <BackButton className="absolute top-4 left-4 z-10" />
         <CardTitle className="text-2xl font-bold text-center">
-          Create Account
+          Sign in
         </CardTitle>
         <CardDescription className="text-center">
-          Enter your details to create a new account
+          Enter your details to enter the application
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -48,23 +48,15 @@ export default function Component() {
             Password
           </PasswordInput>
 
-          <PasswordInput
-            placeholder="Confirm your password"
-            required
-            id="confirm-password"
-          >
-            Confirm Password
-          </PasswordInput>
-
           <Button type="submit" className="w-full">
-            Create Account
+            Sign in
           </Button>
         </form>
 
         <div className="mt-4 text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link href="/sign-in" className="text-primary hover:underline">
-            Sign in
+          Don&apos;t have an account?{" "}
+          <Link href="/sign-up" className="text-primary hover:underline">
+            Sign up
           </Link>
         </div>
       </CardContent>
