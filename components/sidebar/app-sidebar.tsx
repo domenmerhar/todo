@@ -4,44 +4,65 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
+  SidebarMenuItem,
   SidebarRail,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 
 import Avatar from "@/components/avatar";
-import { Plus } from "lucide-react";
+import { KeyRound, Plus, UserRoundPen } from "lucide-react";
 import SidebarTrigger from "./sidebar-button";
-import { Button } from "../ui/button";
-import { Dialog, DialogTrigger } from "../ui/dialog";
-import AddTaskGroupModal from "../ui/add-task-group-modal";
+
+import AddTaskGroupModal from "../modal/add-task-group-modal";
+import SidebarDialog from "./sidebar-dialog";
+import { EditUsernameModal } from "../modal/edit-username-modal";
+import EditPasswordModal from "../modal/edit-password-modal";
 
 export function AppSidebar() {
   return (
-    <Dialog>
+    <>
       <Sidebar side="right" collapsible="icon" className="min-w-12">
         <SidebarRail />
         <SidebarHeader>
           <SidebarTrigger tooltipContent="Username">
-            <Avatar variant="large">CN</Avatar>
+            <Avatar variant="large">CN</Avatar> Username
           </SidebarTrigger>
+          <SidebarSeparator className="my-2" />
         </SidebarHeader>
 
         <SidebarContent>
-          <SidebarGroup></SidebarGroup>
-          <SidebarGroup />
+          <SidebarGroup className="space-y-4">
+            <SidebarMenuItem>
+              <SidebarDialog
+                icon={<UserRoundPen className="stroke-secondary size-12 p-0" />}
+                text="Edit Username"
+              >
+                <EditUsernameModal />
+              </SidebarDialog>
+            </SidebarMenuItem>
+
+            <SidebarMenuItem>
+              <SidebarDialog
+                icon={<KeyRound className="stroke-secondary size-12 p-0" />}
+                text="Edit Password"
+              >
+                <EditPasswordModal />
+              </SidebarDialog>
+            </SidebarMenuItem>
+          </SidebarGroup>
         </SidebarContent>
 
         <SidebarFooter>
-          <DialogTrigger asChild>
-            <SidebarTrigger tooltipContent="Add Group">
-              <Button className="size-10" asChild>
-                <Plus className="stroke-secondary size-12 p-0" />
-              </Button>
-            </SidebarTrigger>
-          </DialogTrigger>
+          <SidebarSeparator className="my-2" />
+
+          <SidebarDialog
+            icon={<Plus className="stroke-secondary size-12 p-0" />}
+            text="Add Group"
+          >
+            <AddTaskGroupModal />
+          </SidebarDialog>
         </SidebarFooter>
       </Sidebar>
-
-      <AddTaskGroupModal />
-    </Dialog>
+    </>
   );
 }
