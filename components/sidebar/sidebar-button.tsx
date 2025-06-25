@@ -9,15 +9,16 @@ export default function SidebarTrigger({
   tooltipContent: string;
 }) {
   return (
-    <div className="flex items-center gap-4 ">
+    <div>
       <Tooltip>
-        <TooltipTrigger>{children}</TooltipTrigger>
+        <TooltipTrigger className="flex items-center gap-4 whitespace-nowrap">
+          {children}
+        </TooltipTrigger>
 
         <TooltipContent side="left">
           <p>{tooltipContent}</p>
         </TooltipContent>
       </Tooltip>
-      <p className="font-medium shrink-0">{tooltipContent}</p>
     </div>
   );
 }
