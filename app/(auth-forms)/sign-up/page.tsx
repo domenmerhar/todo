@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -14,6 +12,12 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import PasswordInput from "@/components/password-input";
 import BackButton from "@/components/back-button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign up",
+  description: "Create a new account to access the application.",
+};
 
 export default function Component() {
   return (
