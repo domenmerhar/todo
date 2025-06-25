@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -14,6 +12,13 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import PasswordInput from "@/components/password-input";
 import BackButton from "@/components/back-button";
+import { Metadata } from "next";
+import { signIn } from "@/actions/auth";
+
+export const metadata: Metadata = {
+  title: "Sign in",
+  description: "Sign in to your account to access the application.",
+};
 
 export default function Component() {
   return (
@@ -28,7 +33,7 @@ export default function Component() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="space-y-4">
+        <form className="space-y-4" action={signIn}>
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
             <Input
@@ -52,7 +57,6 @@ export default function Component() {
             Sign in
           </Button>
         </form>
-
         <div className="mt-4 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link href="/sign-up" className="text-primary hover:underline">
