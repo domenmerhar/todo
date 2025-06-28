@@ -17,33 +17,26 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { SortableItem } from "./sortable-item";
+import { IdLabelObj } from "@/lib/types/objects";
+import { SortableTodo } from "./sortable-todo";
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-};
-const dummyData: User[] = [
+const testData: IdLabelObj[] = [
   {
-    id: 1,
-    name: "John Doe",
-    email: "john@example.com",
+    id: "1",
+    label: "Test Task 1",
   },
   {
-    id: 2,
-    name: "Jane Smith",
-    email: "jane@example.com",
+    id: "2",
+    label: "Test Task 2",
   },
   {
-    id: 3,
-    name: "Alice Johnson",
-    email: "alice@example.com",
+    id: "3",
+    label: "Test Task 3",
   },
 ];
 
-const UserList = () => {
-  const [userList, setUserList] = useState<User[]>(dummyData);
+export const SortableTodos = () => {
+  const [todos, setTodos] = useState<IdLabelObj[]>(testData);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -55,36 +48,33 @@ const UserList = () => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      setUserList((items) => {
+      setTodos((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
+
+        // console.log(newIndex);
+        // console.log(active);
 
         return arrayMove(items, oldIndex, newIndex);
       });
     }
   }
-  console.log(userList);
 
   return (
     <div className="max-w-2xl mx-auto grid gap-2 my-10">
-      <h2 className="text-2xl font-bold mb-4">User List</h2>
+      <h2 className="text-2xl font-bold mb-4">Todos</h2>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
         modifiers={[restrictToVerticalAxis]}
       >
-        <SortableContext
-          items={userList}
-          strategy={verticalListSortingStrategy}
-        >
-          {userList.map((user) => (
-            <SortableItem key={user.id} user={user} />
+        <SortableContext items={todos} strategy={verticalListSortingStrategy}>
+          {todos.map((user) => (
+            <SortableTodo key={user.id} id={user.id} label={user.label} />
           ))}
         </SortableContext>
       </DndContext>
     </div>
   );
 };
-
-export default UserList;
