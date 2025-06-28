@@ -127,10 +127,9 @@ import {
   Wrench,
   Zap,
 } from "lucide-react";
+import { NameValueIconObj } from "../types/icons";
 
-import { NameValueObj } from "../types/icons";
-
-export const ICONS: NameValueObj[] = [
+export const ICONS: NameValueIconObj[] = [
   { name: "Activity", value: Activity },
   { name: "Airplay", value: Airplay },
   { name: "Alarm Clock", value: AlarmClock },

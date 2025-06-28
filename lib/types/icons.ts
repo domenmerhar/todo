@@ -129,7 +129,7 @@ export type IconName =
   | "Wrench"
   | "Zap";
 
-export interface NameValueObj {
+export interface NameValueIconObj {
   name: IconName;
   value: LucideIcon;
 }
