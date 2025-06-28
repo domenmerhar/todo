@@ -24,10 +24,13 @@ export default async function Layout({
           </div>
         </header>
 
-        <section className="flex">
-          {children}
+        <div className="flex">
+          <main className="min-w-sm max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {children}
+          </main>
+
           <AppSidebar />
-        </section>
+        </div>
       </SidebarProvider>
     </>
   );
