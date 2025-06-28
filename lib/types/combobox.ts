@@ -1,3 +1,3 @@
-import { NameValueObj } from "./icons";
+import { NameValueIconObj } from "./icons";
 
-export type comboboxRenderFn = (option: NameValueObj) => React.ReactNode;
+export type comboboxRenderFn = (option: NameValueIconObj) => React.ReactNode;
