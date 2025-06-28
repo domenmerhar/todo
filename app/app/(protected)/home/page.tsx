@@ -87,67 +87,65 @@ const todoGroups = [
 export default function Page() {
   return (
     <>
-      <main className="min-w-sm max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <StatisticCard
-            title="Total Tasks"
-            content="55"
-            contentDescription="Across all groups"
-          />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <StatisticCard
+          title="Total Tasks"
+          content="55"
+          contentDescription="Across all groups"
+        />
 
-          <StatisticCard
-            title="Completed"
-            content="30"
-            contentDescription="55% completion rate"
-          />
+        <StatisticCard
+          title="Completed"
+          content="30"
+          contentDescription="55% completion rate"
+        />
 
-          <StatisticCard
-            title="Due Today"
-            content="7"
-            contentDescription="Tasks requiring attention"
-          />
+        <StatisticCard
+          title="Due Today"
+          content="7"
+          contentDescription="Tasks requiring attention"
+        />
 
-          <StatisticCard
-            title="Active Groups"
-            content="6"
-            contentDescription="Todo categories"
-          />
+        <StatisticCard
+          title="Active Groups"
+          content="6"
+          contentDescription="Todo categories"
+        />
+      </div>
+
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Your Todo Groups
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {todoGroups.map((group) => {
+            const {
+              color,
+              completedTasks,
+              description,
+              dueToday,
+              icon,
+              id,
+              title,
+              totalTasks,
+            } = group;
+
+            return (
+              <TaskGroup
+                key={id}
+                id={id}
+                Icon={icon}
+                color={color}
+                completedTasks={completedTasks}
+                description={description}
+                dueToday={dueToday}
+                title={title}
+                totalTasks={totalTasks}
+              />
+            );
+          })}
         </div>
-
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Your Todo Groups
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {todoGroups.map((group) => {
-              const {
-                color,
-                completedTasks,
-                description,
-                dueToday,
-                icon,
-                id,
-                title,
-                totalTasks,
-              } = group;
-
-              return (
-                <TaskGroup
-                  key={id}
-                  id={id}
-                  Icon={icon}
-                  color={color}
-                  completedTasks={completedTasks}
-                  description={description}
-                  dueToday={dueToday}
-                  title={title}
-                  totalTasks={totalTasks}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </main>
+      </div>
     </>
   );
 }
