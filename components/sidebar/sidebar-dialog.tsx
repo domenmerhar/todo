@@ -16,7 +16,7 @@ export default function SidebarDialog({
     <Dialog>
       <DialogTrigger asChild>
         <SidebarTrigger tooltipContent={text}>
-          <Button className="size-10" asChild>
+          <Button className="size-8 p-3" asChild>
             {icon}
           </Button>
           {text}
