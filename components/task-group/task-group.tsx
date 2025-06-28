@@ -37,9 +37,9 @@ export default function TaskGroup({
   return (
     <ContextMenu>
       <ContextMenuTrigger>
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-          <CardHeader className="pb-3">
-            <Link href={`/app/task-group/${id}`} className="block">
+        <Link href={`/app/group/${id}`} className="block">
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+            <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div
@@ -56,33 +56,33 @@ export default function TaskGroup({
                 </div>
                 <ContextMenuList id={id} />
               </div>
-            </Link>
-          </CardHeader>
+            </CardHeader>
 
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span>Progress</span>
-                  <span>{completionPercentage}%</span>
-                </div>
-                <Progress value={completionPercentage} className="h-2" />
-              </div>
-
-              <div className="flex justify-between items-center">
-                <div className="text-sm text-muted-foreground">
-                  {completedTasks}/{totalTasks} tasks
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between text-sm mb-2">
+                    <span>Progress</span>
+                    <span>{completionPercentage}%</span>
+                  </div>
+                  <Progress value={completionPercentage} className="h-2" />
                 </div>
 
-                {dueToday > 0 && (
-                  <Badge variant="secondary" className="text-xs">
-                    {dueToday} due today
-                  </Badge>
-                )}
+                <div className="flex justify-between items-center">
+                  <div className="text-sm text-muted-foreground">
+                    {completedTasks}/{totalTasks} tasks
+                  </div>
+
+                  {dueToday > 0 && (
+                    <Badge variant="secondary" className="text-xs">
+                      {dueToday} due today
+                    </Badge>
+                  )}
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Link>
       </ContextMenuTrigger>
     </ContextMenu>
   );
