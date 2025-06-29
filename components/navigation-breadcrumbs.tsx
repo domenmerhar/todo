@@ -11,42 +11,43 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
+import { Fragment } from "react";
 
 export function NavigationBreadcrumb({ className }: { className?: string }) {
   const path = usePathname();
   const paths = path.split("/").filter((p) => p !== "");
 
-  const lastIndex = paths.length - 1;
-
   return (
     <Breadcrumb className={className}>
       <BreadcrumbList>
-        {paths.map((p, i) => (
-          <>
-            {i === lastIndex ? (
-              <BreadcrumbPage key={p}>
-                <BreadcrumbLink asChild>
-                  <Link href={`/${p}`}>
-                    {p.charAt(0).toUpperCase() + p.slice(1)}
-                  </Link>
-                </BreadcrumbLink>
-              </BreadcrumbPage>
-            ) : (
-              <BreadcrumbItem key={p}>
-                <BreadcrumbLink asChild>
-                  <Link href={`/${p}`}>
-                    {p.charAt(0).toUpperCase() + p.slice(1)}
-                  </Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            )}
+        {paths.map((p, i) => {
+          const isLast = i === paths.length - 1;
+          const pathHref = `/${paths.slice(0, i + 1).join("/")}`;
 
-            <BreadcrumbSeparator
-              key={`${p}-separator`}
-              className="last:hidden"
-            />
-          </>
-        ))}
+          return (
+            <Fragment key={p}>
+              {isLast ? (
+                <BreadcrumbPage>
+                  <BreadcrumbLink asChild>
+                    <Link href={pathHref}>
+                      {p.charAt(0).toUpperCase() + p.slice(1)}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbPage>
+              ) : (
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href={pathHref}>
+                      {p.charAt(0).toUpperCase() + p.slice(1)}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              )}
+
+              <BreadcrumbSeparator className="last:hidden" />
+            </Fragment>
+          );
+        })}
       </BreadcrumbList>
     </Breadcrumb>
   );
