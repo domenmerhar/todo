@@ -3,6 +3,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { cookies } from "next/headers";
 import { SidebarCustomTrigger } from "@/components/sidebar/sidebar-custom-trigger";
+import { NavigationBreadcrumb } from "@/components/navigation-breadcrumbs";
 
 export default async function Layout({
   children,
@@ -26,7 +27,7 @@ export default async function Layout({
 
         <div className="flex">
           <main className="min-w-sm max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {children}
+            <NavigationBreadcrumb className="mb-6" /> {children}
           </main>
 
           <AppSidebar />
