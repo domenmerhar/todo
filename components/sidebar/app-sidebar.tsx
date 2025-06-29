@@ -10,13 +10,15 @@ import {
 } from "@/components/ui/sidebar";
 
 import Avatar from "@/components/avatar";
-import { KeyRound, Plus, UserRoundPen } from "lucide-react";
+import { DoorOpenIcon, KeyRound, Plus, UserRoundPen } from "lucide-react";
 import SidebarTrigger from "./sidebar-button";
 
 import AddTaskGroupModal from "../modal/add-task-group-modal";
 import SidebarDialog from "./sidebar-dialog";
 import { EditUsernameModal } from "../modal/edit-username-modal";
 import EditPasswordModal from "../modal/edit-password-modal";
+import { Button } from "../ui/button";
+import { signOut } from "@/lib/actions/auth";
 
 export function AppSidebar() {
   return (
@@ -48,6 +50,14 @@ export function AppSidebar() {
               >
                 <EditPasswordModal />
               </SidebarDialog>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarTrigger tooltipContent="Sign Out">
+                <Button className="size-12 p-3" asChild onClick={signOut}>
+                  <DoorOpenIcon />
+                </Button>
+                Sign Out
+              </SidebarTrigger>
             </SidebarMenuItem>
           </SidebarGroup>
         </SidebarContent>
