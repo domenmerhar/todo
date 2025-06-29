@@ -37,7 +37,7 @@ export default function TaskGroup({
   return (
     <ContextMenu>
       <ContextMenuTrigger>
-        <Link href={`/app/group/${id}`} className="block">
+        <Link href={`/home/${id}`} className="block">
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
