@@ -18,14 +18,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { NameValueObj } from "@/lib/types/icons";
 import { comboboxRenderFn } from "@/lib/types/combobox";
+import { NameValueIconObj } from "@/lib/types/icons";
 
 export function Combobox({
   options,
   renderFn,
 }: {
-  options: NameValueObj[];
+  options: NameValueIconObj[];
   renderFn?: comboboxRenderFn;
 }) {
   const [open, setOpen] = React.useState(false);
