@@ -25,7 +25,7 @@ export default function AddTaskGroupModal() {
 
         <div className="space-y-2">
           <Label htmlFor="name">Task Group Name</Label>
-          <Input id="name" name="name" placeholder="Shopping list" />
+          <Input id="name" name="name" placeholder="Shopping list" required />
         </div>
 
         <IconCombobox />
@@ -44,7 +44,7 @@ export default function AddTaskGroupModal() {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit">Create</Button>
         </DialogFooter>
       </form>
     </DialogContent>
