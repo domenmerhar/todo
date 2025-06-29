@@ -61,20 +61,17 @@ export const SortableTodos = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto grid gap-2 my-10">
-      <h2 className="text-2xl font-bold mb-4">Todos</h2>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-        modifiers={[restrictToVerticalAxis]}
-      >
-        <SortableContext items={todos} strategy={verticalListSortingStrategy}>
-          {todos.map((user) => (
-            <SortableTodo key={user.id} id={user.id} label={user.label} />
-          ))}
-        </SortableContext>
-      </DndContext>
-    </div>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      modifiers={[restrictToVerticalAxis]}
+    >
+      <SortableContext items={todos} strategy={verticalListSortingStrategy}>
+        {todos.map((user) => (
+          <SortableTodo key={user.id} id={user.id} label={user.label} />
+        ))}
+      </SortableContext>
+    </DndContext>
   );
 };
