@@ -28,9 +28,9 @@ export default function SignInForm() {
           id="email"
           name="email"
           type="email"
-          placeholder="Enter your username"
+          placeholder="Enter your email"
           required
-          defaultValue={state.values?.email}
+          defaultValue={state?.values?.email}
         />
       </div>
 
@@ -38,14 +38,14 @@ export default function SignInForm() {
         placeholder="Enter your password"
         required
         id="password"
-        defaultValue={state.values?.password}
+        defaultValue={state?.values?.password}
         name="password"
       >
         Password
       </PasswordInput>
 
-      {state.errors && state.errors?.length > 0 ? (
-        <ErrorList errors={state.errors} />
+      {state?.errors && state?.errors?.length > 0 ? (
+        <ErrorList errors={state?.errors} />
       ) : null}
 
       <Button type="submit" className="w-full" disabled={isPending}>
