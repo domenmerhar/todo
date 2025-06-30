@@ -23,11 +23,10 @@ export async function signIn(
   if (errors.length) return { values: { email, password }, errors };
 
   try {
-    const data = await auth.api.signInEmail({
+    await auth.api.signInEmail({
       body: { email, password },
       headers: await headers(),
     });
-    console.log(data);
   } catch {
     return {
       values: { email, password },
@@ -98,4 +97,12 @@ export async function signOut() {
     console.error("Failed to sign out", error);
   }
   redirect("/");
+}
+
+export async function getSession() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  return session;
 }
