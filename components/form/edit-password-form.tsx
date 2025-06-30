@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   DialogClose,
   DialogFooter,
@@ -14,15 +14,21 @@ import { useActionState } from "react";
 import { changePassword } from "@/lib/actions/user";
 import ErrorList from "../error-list";
 import { Spinner } from "../ui/spinner";
+import { toast } from "sonner";
 
 export default function EditPasswordForm() {
   const [state, formAction, isPending] = useActionState(changePassword, {
+    success: false,
     errors: [],
     values: {
       password: "",
-      confirmPassword: "",
+      newPassword: "",
     },
   });
+
+  useEffect(() => {
+    if (state.success) toast.success("Password changed successfully!");
+  }, [state.success]);
 
   return (
     <Form action={formAction} formMethod="POST" className="space-y-4">
@@ -41,13 +47,13 @@ export default function EditPasswordForm() {
       </PasswordInput>
 
       <PasswordInput
-        placeholder="Confirm your password"
+        placeholder="Enter your new password"
         required
-        id="confirm-password"
-        name="confirm-password"
-        defaultValue={state.values.confirmPassword}
+        id="new-password"
+        name="new-password"
+        defaultValue={state.values.newPassword}
       >
-        Confirm Password
+        New Password
       </PasswordInput>
 
       {state.errors?.length ? <ErrorList errors={state.errors} /> : null}
