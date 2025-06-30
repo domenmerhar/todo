@@ -2,15 +2,16 @@
 
 import { redirect } from "next/navigation";
 import { auth } from "../auth";
-import pool from "../db/pool";
+import { headers } from "next/headers";
 
-export async function signIn(_prevState: {}, formData: FormData) {
+export async function signIn(
+  _prevState: { values: { email: string; password: string } },
+  formData: FormData
+) {
   const email = (formData.get("email") as string) || "";
   const password = (formData.get("password") as string) || "";
 
   const errors: string[] = [];
-
-  console.log({ email, password });
 
   if (!email.trim()) errors.push("Username or email is required.");
   else if (!email.includes("@")) errors.push("Email must be valid.");
@@ -20,6 +21,19 @@ export async function signIn(_prevState: {}, formData: FormData) {
     errors.push("Password must be at least 8 characters.");
 
   if (errors.length) return { values: { email, password }, errors };
+
+  try {
+    const data = await auth.api.signInEmail({
+      body: { email, password },
+      headers: await headers(),
+    });
+    console.log(data);
+  } catch {
+    return {
+      values: { email, password },
+      errors: ["Invalid email or password."],
+    };
+  }
 
   redirect("/home");
 }
@@ -54,21 +68,34 @@ export async function signUp(
       errors,
     };
 
-  const dbRes = await pool.query("SELECT * FROM 'User';");
-  console.log(dbRes.rows);
-
-  const res = await auth.api.signUpEmail({
-    body: { name: username, email, password, callbackURL: "/home" },
-    method: "POST",
-  });
-
-  console.log(res);
+  try {
+    await auth.api.signUpEmail({
+      body: { name: username, email, password, callbackURL: "/home" },
+      headers: await headers(),
+    });
+  } catch (error) {
+    console.error("Failed to sign up", error);
+    return {
+      values: {
+        username,
+        email,
+        password,
+        confirmPassword,
+      },
+      errors: ["Failed to sign up. Please try again."],
+    };
+  }
 
   redirect("/home");
 }
 
 export async function signOut() {
-  console.log("Signing out...");
-
+  try {
+    await auth.api.signOut({
+      headers: await headers(),
+    });
+  } catch (error) {
+    console.error("Failed to sign out", error);
+  }
   redirect("/");
 }
