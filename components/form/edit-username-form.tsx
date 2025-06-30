@@ -10,32 +10,41 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { editUsername } from "@/lib/actions/user";
 import { Spinner } from "../ui/spinner";
+import { toast } from "sonner";
 
 export default function EditUsernameForm() {
   const [state, formAction, isPending] = useActionState(editUsername, {
+    success: false,
     error: "",
     values: {
       username: "",
     },
   });
 
+  useEffect(() => {
+    toast.success("Username changed successfully!");
+  }, [state.success]);
+
   return (
-    <Form action={formAction} className="space-y-2" formMethod="POST">
+    <Form action={formAction} className="space-y-4" formMethod="POST">
       <DialogHeader>
         <DialogTitle>Edit Username</DialogTitle>
       </DialogHeader>
-      <Label htmlFor="username" className="block">
-        Username
-      </Label>
-      <Input
-        id="username"
-        name="username"
-        placeholder="johnny007"
-        defaultValue={state.values?.username}
-      />
+
+      <div className="space-y-2">
+        <Label htmlFor="username" className="block">
+          Username
+        </Label>
+        <Input
+          id="username"
+          name="username"
+          placeholder="johnny007"
+          defaultValue={state.values?.username}
+        />
+      </div>
 
       {state.error ? (
         <p className="text-red-500 text-sm mt-1">{state.error}</p>
