@@ -16,7 +16,7 @@ export default function LandingPage() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <Link href="/sign-up">
+          <Link href="/sign-in">
             <Button size="lg" className="text-lg px-8 py-3">
               Get Started
             </Button>
