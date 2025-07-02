@@ -25,7 +25,7 @@ export default function EditUsernameForm() {
   });
 
   useEffect(() => {
-    toast.success("Username changed successfully!");
+    if (state.success) toast.success("Username changed successfully!");
   }, [state.success]);
 
   return (
