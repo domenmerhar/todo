@@ -257,4 +257,6 @@ export const ICONS: NameValueIconObj[] = [
   { name: "Wifi", value: Wifi },
   { name: "Wrench", value: Wrench },
   { name: "Zap", value: Zap },
-];
+] as const;
+
+export const ICON_NAMES = ICONS.map((icon) => icon.name);
