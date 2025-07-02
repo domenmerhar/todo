@@ -2,9 +2,9 @@
 
 import { headers } from "next/headers";
 import { auth } from "../auth";
-import pool from "../db/pool";
 import { getSession } from "./auth";
 import { redirect } from "next/navigation";
+import { query } from "../db";
 
 export async function editUsername(
   _prevState: { values: { username: string }; errors: string[] },
@@ -21,7 +21,7 @@ export async function editUsername(
   if (!session || !session.user || !session.user.id) redirect("/sing-in");
 
   try {
-    await pool.query(`UPDATE "user" SET name = $1 WHERE id = $2`, [
+    await query(`UPDATE "user" SET name = $1 WHERE id = $2`, [
       username,
       session.user.id,
     ]);
