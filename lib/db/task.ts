@@ -55,9 +55,6 @@ export async function getUserTaskCompletionRate(): Promise<GetUserTaskCompletion
     return { success: false, error: "Failed to fetch completion percentage" };
   }
 
-  if (!res.rows[0])
-    return { success: false, error: "No completion percentage found" };
-
   return {
     success: true,
     completionRate: res.rows[0].completion_percentage,
@@ -94,8 +91,6 @@ export async function getUserTaskCount(): Promise<GetUserTaskCountResponse> {
     return { success: false, error: "Failed to fetch task count" };
   }
 
-  if (!res || !res.rowCount) return { success: false, error: "No tasks found" };
-
   return {
     success: true,
     count: res.rows[0].count,
@@ -121,9 +116,6 @@ export async function getGroupTasks(
     console.error("Error fetching group tasks:", error);
     return { success: false, error: "Failed to fetch group tasks" };
   }
-
-  if (!res || !res.rowCount)
-    return { success: false, error: "No tasks found for this group" };
 
   return {
     success: true,
