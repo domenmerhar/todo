@@ -1,7 +1,9 @@
 import AddTodoButton from "@/components/add-todo-button";
-import { SortableTodos } from "@/components/drag-and-drop/sortable-todos";
+import GroupTitle from "@/components/drag-and-drop/group-title";
+import SortableTodosHolder from "@/components/drag-and-drop/sortable-todos-holder";
 import SearchBar from "@/components/searchbar";
 import { SelectParam } from "@/components/select-param";
+import { Suspense } from "react";
 
 export const metadata = {};
 
@@ -28,8 +30,16 @@ export default async function Page({
       </form>
 
       <div className="max-w-2xl mx-auto grid gap-2 my-10">
-        <h2 className="text-2xl font-bold mb-4">{groupId}</h2>
-        <SortableTodos />
+        <Suspense fallback={<div>Loading group...</div>} key={groupId}>
+          <GroupTitle groupId={groupId} />
+        </Suspense>
+
+        <Suspense
+          fallback={<div>Loading todos...</div>}
+          key={`${groupId} todos`}
+        >
+          <SortableTodosHolder groupId={groupId} />
+        </Suspense>
       </div>
     </div>
   );
