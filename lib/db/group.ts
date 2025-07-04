@@ -1,5 +1,8 @@
 import "server-only";
 import { query } from ".";
+import { getSession } from "../actions/auth";
+import { DEV_PROMISE_DELAY } from "../constants";
+import { DBResponse } from "../types/db";
 
 export interface Group {
   id: number;
@@ -11,16 +14,110 @@ export interface Group {
   color: string;
 }
 
-interface GetGroupByIdResponse {
-  success: boolean;
+interface GetUserIncompletedGroupsResponse extends DBResponse {
+  incompletedGroups?: number;
+}
+
+export async function getUserIncompletedGroups(): Promise<GetUserIncompletedGroupsResponse> {
+  await new Promise((resolve) => setTimeout(resolve, DEV_PROMISE_DELAY));
+
+  const session = await getSession();
+  if (!session?.user?.id)
+    return { success: false, error: "User not authenticated" };
+
+  let res;
+  try {
+    res = await query(
+      `
+      SELECT COUNT(*) AS incompleted_groups
+      FROM "Group" g
+      WHERE g.user_id = $1
+        AND EXISTS (
+          SELECT 1
+          FROM "Task" t
+          WHERE t.group_id = g.id
+            AND t.finished = false
+      );
+      `,
+      [session.user.id]
+    );
+  } catch (error) {
+    console.error("Error fetching uncompleted groups:", error);
+
+    return {
+      success: false,
+      error: "Failed to fetch uncompleted groups",
+    };
+  }
+
+  if (!res.rows[0])
+    return {
+      success: false,
+      error: "Failed to fetch completed groups",
+    };
+
+  return {
+    success: true,
+    incompletedGroups: res.rows[0].incompleted_groups,
+  };
+}
+
+interface GetUserCompletedGroupsResponse extends DBResponse {
+  completedGroups?: number;
+}
+
+export async function getUserCompletedGroups(): Promise<GetUserCompletedGroupsResponse> {
+  await new Promise((resolve) => setTimeout(resolve, DEV_PROMISE_DELAY));
+
+  const session = await getSession();
+  if (!session?.user?.id)
+    return { success: false, error: "User not authenticated" };
+
+  let res;
+  try {
+    res = await query(
+      `
+      SELECT COUNT(*) AS completed_groups
+      FROM "Group" g
+      WHERE g.user_id = $1
+        AND NOT EXISTS (
+          SELECT 1
+          FROM "Task" t
+          WHERE t.group_id = g.id
+            AND t.finished = false
+      );
+      `,
+      [session.user.id]
+    );
+  } catch (error) {
+    console.error("Error fetching completed groups:", error);
+
+    return {
+      success: false,
+      error: "Failed to fetch completed groups",
+    };
+  }
+
+  if (!res.rows[0])
+    return {
+      success: false,
+      error: "Failed to fetch completed groups",
+    };
+
+  return {
+    success: true,
+    completedGroups: res.rows[0].completed_groups,
+  };
+}
+
+interface GetGroupByIdResponse extends DBResponse {
   group?: Group;
-  error?: string;
 }
 
 export async function getGroupById(
   groupId: string
 ): Promise<GetGroupByIdResponse> {
-  await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay
+  await new Promise((resolve) => setTimeout(resolve, DEV_PROMISE_DELAY));
   let res;
   try {
     res = await query(`SELECT * FROM "Group" WHERE "id" = $1`, [groupId]);
