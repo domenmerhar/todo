@@ -1,19 +1,13 @@
 "use client";
 
 import Form from "next/form";
-import { Button } from "../ui/button";
-import {
-  DialogClose,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+import { DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 import { editUsername } from "@/lib/actions/user";
-import { Spinner } from "../ui/spinner";
-import { toast } from "sonner";
+import ModalPendingButtons from "../modal/modal-pending-buttons";
+import useToastTrue from "@/lib/hooks/use-toast-true";
 
 export default function EditUsernameForm() {
   const [state, formAction, isPending] = useActionState(editUsername, {
@@ -24,9 +18,7 @@ export default function EditUsernameForm() {
     },
   });
 
-  useEffect(() => {
-    if (state.success) toast.success("Username changed successfully!");
-  }, [state.success]);
+  useToastTrue(state.success, "Username changed successfully!");
 
   return (
     <Form action={formAction} className="space-y-4" formMethod="POST">
@@ -51,15 +43,11 @@ export default function EditUsernameForm() {
       ) : null}
 
       <DialogFooter>
-        <DialogClose asChild>
-          <Button variant="outline" disabled={isPending}>
-            {isPending ? <Spinner className="text-gray-100" /> : "Cancel"}
-          </Button>
-        </DialogClose>
-
-        <Button type="submit" disabled={isPending}>
-          {isPending ? <Spinner className="text-gray-100" /> : "Save Changes"}
-        </Button>
+        <ModalPendingButtons
+          isPending={isPending}
+          buttonOneText="Cancel"
+          buttonTwoText="Save Changes"
+        />
       </DialogFooter>
     </Form>
   );
