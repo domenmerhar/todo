@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useActionState } from "react";
 import {
   DialogContent,
   DialogFooter,
@@ -7,19 +9,48 @@ import {
 } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { Button } from "../ui/button";
+import { addTodo } from "@/lib/actions/todo";
+import Form from "next/form";
+import { useParams } from "next/navigation";
+import ErrorList from "../error-list";
+import ModalPendingButtons from "./modal-pending-buttons";
+import useToastTrue from "@/lib/hooks/use-toast-true";
 
 export default function AddTodoModal() {
+  const [state, formAction, isPending] = useActionState(addTodo, {
+    success: false,
+    errors: [],
+    values: {
+      name: "",
+      groupId: "",
+    },
+  });
+
+  useToastTrue(state.success, "Todo added successfully!");
+
+  const { groupId } = useParams();
+
   return (
     <DialogContent className="sm:max-w-[425px]">
-      <form className="space-y-4">
+      <Form action={formAction} formMethod="POST" className="space-y-4">
         <DialogHeader>
           <DialogTitle>Add Todo</DialogTitle>
         </DialogHeader>
 
+        <input
+          type="hidden"
+          readOnly
+          name="groupId"
+          value={groupId}
+          className="hidden"
+        />
+
         <div className="space-y-2">
-          <Label htmlFor="name" className="block">
+          <Label
+            htmlFor="name"
+            className="block"
+            defaultValue={state.values.name}
+          >
             Name
           </Label>
           <Input
@@ -30,13 +61,16 @@ export default function AddTodoModal() {
           />
         </div>
 
+        <ErrorList errors={state.errors} />
+
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
-          <Button type="submit">Create</Button>
+          <ModalPendingButtons
+            isPending={isPending}
+            buttonOneText="Cancel"
+            buttonTwoText="Create"
+          />
         </DialogFooter>
-      </form>
+      </Form>
     </DialogContent>
   );
 }
