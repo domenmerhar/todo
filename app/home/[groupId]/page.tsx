@@ -3,6 +3,9 @@ import GroupTitle from "@/components/drag-and-drop/group-title";
 import SortableTodosHolder from "@/components/drag-and-drop/sortable-todos-holder";
 import SearchBar from "@/components/searchbar";
 import { SelectParam } from "@/components/select-param";
+import { getSession } from "@/lib/actions/auth";
+import { getGroupById } from "@/lib/db/group";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export const metadata = {};
@@ -19,6 +22,13 @@ export default async function Page({
   params: Promise<{ groupId: string }>;
 }) {
   const { groupId } = await params;
+  const [data, session] = await Promise.all([
+    getGroupById(groupId),
+    getSession(),
+  ]);
+
+  if (data.group?.public === false && data.group?.user_id !== session?.user?.id)
+    redirect("/home");
 
   return (
     <div>
