@@ -1,20 +1,14 @@
 "use client";
 
-import React, { useEffect } from "react";
-import {
-  DialogClose,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+import React from "react";
+import { DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import PasswordInput from "../password-input";
-import { Button } from "../ui/button";
 import Form from "next/form";
 import { useActionState } from "react";
 import { changePassword } from "@/lib/actions/user";
 import ErrorList from "../error-list";
-import { Spinner } from "../ui/spinner";
-import { toast } from "sonner";
+import ModalPendingButtons from "../modal/modal-pending-buttons";
+import useToastTrue from "@/lib/hooks/use-toast-true";
 
 export default function EditPasswordForm() {
   const [state, formAction, isPending] = useActionState(changePassword, {
@@ -26,9 +20,7 @@ export default function EditPasswordForm() {
     },
   });
 
-  useEffect(() => {
-    if (state.success) toast.success("Password changed successfully!");
-  }, [state.success]);
+  useToastTrue(state.success, "Password changed successfully!");
 
   return (
     <Form action={formAction} formMethod="POST" className="space-y-4">
@@ -59,15 +51,11 @@ export default function EditPasswordForm() {
       {state.errors?.length ? <ErrorList errors={state.errors} /> : null}
 
       <DialogFooter>
-        <DialogClose asChild>
-          <Button variant="outline" disabled={isPending}>
-            {isPending ? <Spinner className="text-gray-100" /> : "Cancel"}
-          </Button>
-        </DialogClose>
-
-        <Button type="submit" disabled={isPending}>
-          {isPending ? <Spinner className="text-gray-100" /> : "Save Changes"}
-        </Button>
+        <ModalPendingButtons
+          isPending={isPending}
+          buttonOneText="Cancel"
+          buttonTwoText="Save Changes"
+        />
       </DialogFooter>
     </Form>
   );
