@@ -12,16 +12,17 @@ import Link from "next/link";
 import { ContextMenuTrigger } from "../ui/context-menu";
 import { ContextMenu } from "@radix-ui/react-context-menu";
 import ContextMenuList from "./context-menu-list";
+import { cn } from "@/lib/utils";
 
 export default function TaskGroup({
   Icon,
   color,
   completedTasks,
   description,
-  dueToday,
   title,
   totalTasks,
   id,
+  className,
 }: {
   Icon: React.ComponentType;
   color: string;
@@ -29,8 +30,8 @@ export default function TaskGroup({
   description: string;
   totalTasks: number;
   completedTasks: number;
-  dueToday: number;
   id: number;
+  className?: string;
 }) {
   const completionPercentage = Math.round((completedTasks / totalTasks) * 100);
 
@@ -38,7 +39,12 @@ export default function TaskGroup({
     <ContextMenu>
       <ContextMenuTrigger>
         <Link href={`/home/${id}`} className="block">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+          <Card
+            className={cn(
+              "hover:shadow-lg transition-shadow cursor-pointer",
+              className
+            )}
+          >
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
@@ -72,12 +78,6 @@ export default function TaskGroup({
                   <div className="text-sm text-muted-foreground">
                     {completedTasks}/{totalTasks} tasks
                   </div>
-
-                  {dueToday > 0 && (
-                    <Badge variant="secondary" className="text-xs">
-                      {dueToday} due today
-                    </Badge>
-                  )}
                 </div>
               </div>
             </CardContent>
