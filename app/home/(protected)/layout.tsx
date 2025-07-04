@@ -6,7 +6,8 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  if (!(await getSession())) redirect("/sign-in");
+  const session = await getSession();
+  if (!session?.user) redirect("/sign-in");
 
   return <section>{children}</section>;
 }
