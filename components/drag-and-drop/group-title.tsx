@@ -1,12 +1,12 @@
 import { ICONS } from "@/lib/constants/icons";
 import { getGroupById } from "@/lib/db/group";
+import { notFound } from "next/navigation";
 import React, { CSSProperties } from "react";
 
 export default async function GroupTitle({ groupId }: { groupId: string }) {
   const res = await getGroupById(groupId);
 
-  if (!res.success || !res.group)
-    return <div className="text-red-500">{res.error || "Group not found"}</div>;
+  if (!res.success || !res.group) return notFound();
 
   const { color, group_name: groupName, icon } = res.group;
 
