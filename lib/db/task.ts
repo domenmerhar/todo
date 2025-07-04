@@ -2,6 +2,7 @@ import "server-only";
 import { query } from ".";
 import { getSession } from "../actions/auth";
 import { DEV_PROMISE_DELAY } from "../constants";
+import { DBResponse } from "../types/db";
 
 export interface Task {
   id: number;
@@ -10,10 +11,8 @@ export interface Task {
   finsihed: boolean;
 }
 
-interface GetUserTaskCompletionRateResponse {
-  success: boolean;
+interface GetUserTaskCompletionRateResponse extends DBResponse {
   count?: number;
-  error?: string;
 }
 
 export async function getUserTaskCompletionRate(): Promise<GetUserTaskCompletionRateResponse> {
@@ -65,10 +64,8 @@ export async function getUserTaskCompletionRate(): Promise<GetUserTaskCompletion
   };
 }
 
-interface GetUserTaskCountResponse {
-  success: boolean;
+interface GetUserTaskCountResponse extends DBResponse {
   count?: number;
-  error?: string;
 }
 
 export async function getUserTaskCount(): Promise<GetUserTaskCountResponse> {
@@ -105,10 +102,8 @@ export async function getUserTaskCount(): Promise<GetUserTaskCountResponse> {
   };
 }
 
-interface GetGroupTasksResponse {
-  success: boolean;
+interface GetGroupTasksResponse extends DBResponse {
   tasks?: Task[];
-  error?: string;
 }
 
 export async function getGroupTasks(
