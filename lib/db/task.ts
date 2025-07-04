@@ -12,7 +12,7 @@ export interface Task {
 }
 
 interface GetUserTaskCompletionRateResponse extends DBResponse {
-  count?: number;
+  completionRate?: string;
 }
 
 export async function getUserTaskCompletionRate(): Promise<GetUserTaskCompletionRateResponse> {
@@ -60,7 +60,7 @@ export async function getUserTaskCompletionRate(): Promise<GetUserTaskCompletion
 
   return {
     success: true,
-    count: res.rows[0],
+    completionRate: res.rows[0].completion_percentage,
   };
 }
 
@@ -80,7 +80,7 @@ export async function getUserTaskCount(): Promise<GetUserTaskCountResponse> {
   try {
     res = await query(
       `
-        SELECT COUNT(*)
+        SELECT COUNT(*) AS count
         FROM "Task"
         WHERE "group_id"
         IN (SELECT "id"
@@ -98,7 +98,7 @@ export async function getUserTaskCount(): Promise<GetUserTaskCountResponse> {
 
   return {
     success: true,
-    count: res.rows[0],
+    count: res.rows[0].count,
   };
 }
 
