@@ -19,6 +19,7 @@ import {
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { IdLabelObj } from "@/lib/types/objects";
 import { SortableTodo } from "./sortable-todo";
+import { Task } from "@/lib/db/task";
 
 const testData: IdLabelObj[] = [
   {
@@ -35,8 +36,8 @@ const testData: IdLabelObj[] = [
   },
 ];
 
-export const SortableTodos = () => {
-  const [todos, setTodos] = useState<IdLabelObj[]>(testData);
+export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
+  const [todos, setTodos] = useState<Task[]>(tasks);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -52,8 +53,8 @@ export const SortableTodos = () => {
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
 
-        // console.log(newIndex);
-        // console.log(active);
+        // console.log({ newIndex });
+        // console.log({ active });
 
         return arrayMove(items, oldIndex, newIndex);
       });
@@ -68,8 +69,8 @@ export const SortableTodos = () => {
       modifiers={[restrictToVerticalAxis]}
     >
       <SortableContext items={todos} strategy={verticalListSortingStrategy}>
-        {todos.map((user) => (
-          <SortableTodo key={user.id} id={user.id} label={user.label} />
+        {todos.map(({ id, task_name }) => (
+          <SortableTodo key={id} id={String(id)} label={task_name} />
         ))}
       </SortableContext>
     </DndContext>
