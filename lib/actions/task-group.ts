@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "../auth";
+import { redirect } from "next/navigation";
 import { query } from "../db";
 import { getSession } from "./auth";
 
@@ -17,8 +17,6 @@ export async function addTodoGroup(
   },
   formData: FormData
 ) {
-  "use server";
-
   const name = formData.get("name")?.toString() as string;
   const icon = formData.get("icon")?.toString() as string;
   const color = formData.get("color")?.toString() as string;
@@ -29,10 +27,7 @@ export async function addTodoGroup(
 
   const session = await getSession();
 
-  if (!session?.user) {
-    errors.push("You must be logged in to add a task group.");
-    return { success: false, errors, values: {} };
-  }
+  if (!session?.user) redirect("/sign-in");
 
   if (!name.trim().length) errors.push("Name is required.");
   if (!icon.trim().length) errors.push("Icon is required.");
