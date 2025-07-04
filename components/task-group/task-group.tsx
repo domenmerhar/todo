@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Progress } from "../ui/progress";
-import { Badge } from "../ui/badge";
 import Link from "next/link";
 import { ContextMenuTrigger } from "../ui/context-menu";
 import { ContextMenu } from "@radix-ui/react-context-menu";
@@ -18,7 +11,6 @@ export default function TaskGroup({
   Icon,
   color,
   completedTasks,
-  description,
   title,
   totalTasks,
   id,
@@ -27,13 +19,13 @@ export default function TaskGroup({
   Icon: React.ComponentType;
   color: string;
   title: string;
-  description: string;
   totalTasks: number;
   completedTasks: number;
   id: number;
   className?: string;
 }) {
-  const completionPercentage = Math.round((completedTasks / totalTasks) * 100);
+  const completionPercentage =
+    Math.round((completedTasks / totalTasks) * 100) || 0;
 
   return (
     <ContextMenu>
@@ -49,16 +41,12 @@ export default function TaskGroup({
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div
-                    className={`p-2 rounded-lg ${color} text-white *:h-5 *:w-5`}
+                    className={`p-2 rounded-lg text-white *:h-5 *:w-5`}
+                    style={{ backgroundColor: color }}
                   >
                     <Icon />
                   </div>
-                  <div>
-                    <CardTitle className="text-lg">{title}</CardTitle>
-                    <CardDescription className="text-sm">
-                      {description}
-                    </CardDescription>
-                  </div>
+                  <CardTitle className="text-lg">{title}</CardTitle>
                 </div>
                 <ContextMenuList id={id} />
               </div>
