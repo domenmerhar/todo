@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useActionState, useEffect } from "react";
+import React, { useActionState } from "react";
 import {
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
-import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
@@ -16,8 +15,8 @@ import { ColorPicker } from "../color-picker";
 import { addTodoGroup } from "@/lib/actions/task-group";
 import Form from "next/form";
 import ErrorList from "../error-list";
-import { Spinner } from "../ui/spinner";
-import { toast } from "sonner";
+import ModalPendingButtons from "./modal-pending-buttons";
+import useToastTrue from "@/lib/hooks/use-toast-true";
 
 export default function AddTaskGroupModal() {
   const [state, formAction, isPending] = useActionState(addTodoGroup, {
@@ -31,9 +30,7 @@ export default function AddTaskGroupModal() {
     },
   });
 
-  useEffect(() => {
-    toast.success("Task group added successfully!");
-  }, [state.success]);
+  useToastTrue(state.success, "Task group added successfully!");
 
   return (
     <DialogContent className="sm:max-w-[425px]">
@@ -73,13 +70,11 @@ export default function AddTaskGroupModal() {
         <ErrorList errors={state.errors} />
 
         <DialogFooter>
-          <Button variant="outline" disabled={isPending}>
-            {isPending ? <Spinner className="text-gray-100" /> : "Cancel"}
-          </Button>
-
-          <Button type="submit" disabled={isPending}>
-            {isPending ? <Spinner className="text-gray-100" /> : "Save Changes"}
-          </Button>
+          <ModalPendingButtons
+            isPending={isPending}
+            buttonOneText="Cancel"
+            buttonTwoText="Save Changes"
+          />
         </DialogFooter>
       </Form>
     </DialogContent>
