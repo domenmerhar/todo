@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import { getSession } from "./auth";
 import { query } from "../db";
+import { DBResponse } from "../types/db";
+import { reorderTodo, ReorderTodoParams } from "../db/task";
 
 export async function addTodo(
   _prevState: {
@@ -67,4 +69,25 @@ export async function addTodo(
     errors: [],
     values: { name, groupId },
   };
+}
+
+export async function reorderTaskAction({
+  groupId,
+  taskId,
+  oldOrder,
+  newOrder,
+}: ReorderTodoParams): Promise<DBResponse> {
+  const session = await getSession();
+
+  if (!session?.user?.id)
+    return { success: false, error: "User not authenticated" };
+
+  try {
+    await reorderTodo({ groupId, taskId, oldOrder, newOrder });
+  } catch (error) {
+    console.error("Error reordering task:", error);
+    return { success: false, error: "Failed to reorder task" };
+  }
+
+  return { success: true };
 }
