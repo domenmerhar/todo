@@ -16,7 +16,7 @@ const selectOptions = [
   { name: "To Do", value: "todo" },
 ];
 
-export default async function Page({
+export default async function GroupPage({
   params,
 }: {
   params: Promise<{ groupId: string }>;

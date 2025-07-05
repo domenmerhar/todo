@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description: "Create a new account to access the application.",
 };
 
-export default function Page() {
+export default function SignUpPage() {
   return (
     <>
       <CardHeader>

@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { SidebarCustomTrigger } from "@/components/sidebar/sidebar-custom-trigger";
 import { NavigationBreadcrumb } from "@/components/navigation-breadcrumbs";
 
-export default async function Layout({
+export default async function HomeLayout({
   children,
 }: {
   children: React.ReactNode;

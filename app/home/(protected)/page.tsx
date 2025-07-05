@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Welcome to the home page of Todo App.",
 };
 
-export default async function Page() {
+export default async function HomePage() {
   return (
     <>
       <Suspense fallback={<GroupStatisticsSkeleton />}>

@@ -1,6 +1,5 @@
 import type React from "react";
 
-import { Button } from "@/components/ui/button";
 import {
   CardContent,
   CardDescription,
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
   description: "Sign in to your account to access the application.",
 };
 
-export default function Component() {
+export default function SignInPage() {
   return (
     <>
       <CardHeader>

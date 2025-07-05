@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function NotFound() {
+export default function GroupNotFound() {
   return (
     <div className="fixed left-6/12 top-6/12 -translate-x-6/12 -translate-y-6/12">
       <div className="max-w-2xl text-center space-y-8">
