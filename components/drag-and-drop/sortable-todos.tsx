@@ -20,6 +20,7 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { IdLabelObj } from "@/lib/types/objects";
 import { SortableTodo } from "./sortable-todo";
 import { Task } from "@/lib/db/task";
+import { Task as TaskComponent } from "./test";
 
 const testData: IdLabelObj[] = [
   {
@@ -70,9 +71,11 @@ export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
     >
       <SortableContext items={todos} strategy={verticalListSortingStrategy}>
         {todos.map(({ id, task_name }) => (
-          <SortableTodo key={id} id={String(id)} label={task_name} />
+          <TaskComponent id={id} title={task_name} key={id} />
         ))}
       </SortableContext>
     </DndContext>
   );
 };
+
+// <SortableTodo key={id} id={String(id)} label={task_name} />
