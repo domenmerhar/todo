@@ -17,8 +17,10 @@ export function SortableTodo({ id, label }: IdLabelObj) {
 
   return (
     <div
+      className="p-5 bg-white"
       ref={setNodeRef}
-      style={style}
+      {...attributes}
+      {...listeners}
       className="bg-gray-50 p-4 rounded shadow-md flex justify-between items-center"
     >
       <Todo id={String(id)} label={label} />
