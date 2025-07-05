@@ -18,16 +18,26 @@ import SidebarDialog from "./sidebar-dialog";
 import { EditUsernameModal } from "../modal/edit-username-modal";
 import EditPasswordModal from "../modal/edit-password-modal";
 import { Button } from "../ui/button";
-import { signOut } from "@/lib/actions/auth";
+import { getSession, signOut } from "@/lib/actions/auth";
 
-export function AppSidebar() {
+export async function AppSidebar() {
+  const session = await getSession();
+
+  const name = session?.user?.name || "Username";
+  const shortName =
+    name[0].toUpperCase() +
+    name
+      .replaceAll(/[aeiou]/gi, "")
+      .slice(0, 1)
+      .toUpperCase();
+
   return (
     <>
       <Sidebar side="right" collapsible="icon" className="min-w-12">
         <SidebarRail />
         <SidebarHeader>
           <SidebarTrigger tooltipContent="Username">
-            <Avatar variant="large">CN</Avatar> Username
+            <Avatar variant="large">{shortName}</Avatar> {name}
           </SidebarTrigger>
           <SidebarSeparator className="my-2" />
         </SidebarHeader>
