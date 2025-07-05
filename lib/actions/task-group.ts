@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import { query } from "../db";
 import { getSession } from "./auth";
+import { completeGroupTasks, deleteGroup } from "../db/group";
+import { revalidatePath } from "next/cache";
 
 export async function addTodoGroup(
   _prevState: {
@@ -57,4 +59,26 @@ export async function addTodoGroup(
     errors,
     values: { name, icon, color, public: publicBool },
   };
+}
+
+export async function deleteGroupAction(id: number) {
+  try {
+    await deleteGroup(id);
+  } catch (error) {
+    console.error("Error deleting group:", error);
+    return;
+  }
+
+  revalidatePath("/home");
+}
+
+export async function completeGroupTasksAction(id: number) {
+  try {
+    await completeGroupTasks(id);
+  } catch (error) {
+    console.error("Error completing group tasks:", error);
+    return;
+  }
+
+  revalidatePath("/home");
 }
