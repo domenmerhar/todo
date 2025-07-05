@@ -1,6 +1,9 @@
 import AddTodoButton from "@/components/add-todo-button";
 import GroupTitle from "@/components/drag-and-drop/group-title";
+import GroupTitleSkeleton from "@/components/drag-and-drop/group-title-skeleton";
 import SortableTodosHolder from "@/components/drag-and-drop/sortable-todos-holder";
+import SortableTodosSkeleton from "@/components/drag-and-drop/sortable-todos-skeleton";
+import Test from "@/components/drag-and-drop/test";
 import SearchBar from "@/components/searchbar";
 import { SelectParam } from "@/components/select-param";
 import { getSession } from "@/lib/actions/auth";
@@ -40,17 +43,16 @@ export default async function GroupPage({
       </form>
 
       <div className="max-w-2xl mx-auto grid gap-2 my-10">
-        <Suspense fallback={<div>Loading group...</div>} key={groupId}>
+        <Suspense fallback={<GroupTitleSkeleton />} key={groupId}>
           <GroupTitle groupId={groupId} />
         </Suspense>
 
-        <Suspense
-          fallback={<div>Loading todos...</div>}
-          key={`${groupId} todos`}
-        >
+        <Suspense fallback={<SortableTodosSkeleton />} key={`${groupId} todos`}>
           <SortableTodosHolder groupId={groupId} />
         </Suspense>
       </div>
+
+      <Test />
     </div>
   );
 }
