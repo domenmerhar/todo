@@ -14,7 +14,7 @@ export default async function GroupTitle({ groupId }: { groupId: string }) {
   const iconStyle: CSSProperties = { backgroundColor: color };
 
   return (
-    <div className="flex gap-4 items-center">
+    <div className="flex gap-4 items-center mb-4">
       {Icon ? (
         <Icon style={iconStyle} className="text-white size-12 p-2 rounded-lg" />
       ) : null}
