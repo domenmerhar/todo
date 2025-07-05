@@ -1,4 +1,5 @@
 import "server-only";
+
 import { query } from ".";
 import { getSession } from "../actions/auth";
 import { DEV_PROMISE_DELAY } from "../constants";
@@ -174,5 +175,52 @@ export async function getGroupById(
   return {
     success: true,
     group: res.rows[0],
+  };
+}
+
+export async function completeGroupTasks(groupId: number): Promise<DBResponse> {
+  try {
+    await query(
+      `
+        UPDATE "Task"
+        SET finished = true
+        WHERE "group_id" = $1;
+      `,
+      [groupId]
+    );
+  } catch (error) {
+    console.error("Error fetching group:", error);
+
+    return {
+      success: false,
+      error: "Failed to fetch group",
+    };
+  }
+
+  return {
+    success: true,
+  };
+}
+
+export async function deleteGroup(groupId: number): Promise<DBResponse> {
+  try {
+    await query(
+      `
+        DELETE FROM "Group"
+        WHERE id = $1;
+      `,
+      [groupId]
+    );
+  } catch (error) {
+    console.error("Error fetching group:", error);
+
+    return {
+      success: false,
+      error: "Failed to fetch group",
+    };
+  }
+
+  return {
+    success: true,
   };
 }
