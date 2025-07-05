@@ -3,7 +3,6 @@ import GroupTitle from "@/components/drag-and-drop/group-title";
 import GroupTitleSkeleton from "@/components/drag-and-drop/group-title-skeleton";
 import SortableTodosHolder from "@/components/drag-and-drop/sortable-todos-holder";
 import SortableTodosSkeleton from "@/components/drag-and-drop/sortable-todos-skeleton";
-import Test from "@/components/drag-and-drop/test";
 import SearchBar from "@/components/searchbar";
 import { SelectParam } from "@/components/select-param";
 import { getSession } from "@/lib/actions/auth";
@@ -51,8 +50,6 @@ export default async function GroupPage({
           <SortableTodosHolder groupId={groupId} />
         </Suspense>
       </div>
-
-      <Test />
     </div>
   );
 }
