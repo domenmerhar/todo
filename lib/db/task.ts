@@ -1,5 +1,5 @@
 import "server-only";
-import { query } from ".";
+import { getClient, query } from ".";
 import { getSession } from "../actions/auth";
 import { DEV_PROMISE_DELAY } from "../constants";
 import { DBResponse } from "../types/db";
@@ -121,4 +121,63 @@ export async function getGroupTasks(
     success: true,
     tasks: res.rows,
   };
+}
+
+export interface ReorderTodoParams {
+  groupId: number;
+  taskId: number;
+  oldOrder: number;
+  newOrder: number;
+}
+
+export async function reorderTodo({
+  groupId,
+  oldOrder,
+  newOrder,
+  taskId,
+}: ReorderTodoParams) {
+  const client = await getClient();
+
+  try {
+    await client.query(`BEGIN`);
+
+    await client.query(
+      `
+      UPDATE public."Task"
+      SET "order" = "order" - 1
+      WHERE group_id = $1
+        AND "order" > $2
+        AND "order" <= $3
+      `,
+      [groupId, oldOrder, newOrder]
+    );
+
+    await client.query(
+      `
+      UPDATE public."Task"
+      SET "order" = "order" + 1
+      WHERE group_id = $1
+        AND "order" < $2
+        AND "order" >= $3;
+      `,
+      [groupId, oldOrder, newOrder]
+    );
+
+    await client.query(
+      `
+      UPDATE public."Task"
+      SET "order" = $2
+      WHERE group_id = $1
+        AND id = $3;
+        `,
+      [groupId, newOrder, taskId]
+    );
+
+    await client.query(`COMMIT`);
+  } catch (error) {
+    await client.query(`ROLLBACK`);
+    throw error;
+  } finally {
+    client.release();
+  }
 }
