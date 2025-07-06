@@ -2,7 +2,6 @@ import "server-only";
 
 import { query } from ".";
 import { getSession } from "../actions/auth";
-import { DEV_PROMISE_DELAY } from "../constants";
 import { DBResponse } from "../types/db";
 
 export interface Group {
@@ -20,8 +19,6 @@ interface GetUserIncompletedGroupsResponse extends DBResponse {
 }
 
 export async function getUserIncompletedGroups(): Promise<GetUserIncompletedGroupsResponse> {
-  await new Promise((resolve) => setTimeout(resolve, DEV_PROMISE_DELAY));
-
   const session = await getSession();
   if (!session?.user?.id)
     return { success: false, error: "User not authenticated" };
@@ -62,8 +59,6 @@ interface GetUserCompletedGroupsResponse extends DBResponse {
 }
 
 export async function getUserCompletedGroups(): Promise<GetUserCompletedGroupsResponse> {
-  await new Promise((resolve) => setTimeout(resolve, DEV_PROMISE_DELAY));
-
   const session = await getSession();
   if (!session?.user?.id)
     return { success: false, error: "User not authenticated" };
@@ -112,8 +107,6 @@ interface GetUserGroupsResponse extends DBResponse {
 }
 
 export async function getUserGroups(): Promise<GetUserGroupsResponse> {
-  await new Promise((resolve) => setTimeout(resolve, DEV_PROMISE_DELAY));
-
   const session = await getSession();
   if (!session?.user?.id)
     return { success: false, error: "User not authenticated" };
@@ -159,7 +152,6 @@ interface GetGroupByIdResponse extends DBResponse {
 export async function getGroupById(
   groupId: string
 ): Promise<GetGroupByIdResponse> {
-  await new Promise((resolve) => setTimeout(resolve, DEV_PROMISE_DELAY));
   let res;
   try {
     res = await query(`SELECT * FROM "Group" WHERE "id" = $1`, [groupId]);
