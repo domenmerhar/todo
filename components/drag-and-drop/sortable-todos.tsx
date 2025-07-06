@@ -25,7 +25,7 @@ export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
   const [todos, setTodos] = useState<Task[]>(tasks);
 
   const [optimisticTodos, updateOptimisticTodos] = useOptimistic(
-    todos,
+    tasks,
     (state, { oldIndex, newIndex }) => arrayMove(state, oldIndex, newIndex)
   );
 
@@ -69,8 +69,8 @@ export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
         items={optimisticTodos}
         strategy={verticalListSortingStrategy}
       >
-        {optimisticTodos.map(({ id, task_name }) => (
-          <Todo id={id} title={task_name} key={id} />
+        {optimisticTodos.map(({ id, task_name, finished }) => (
+          <Todo id={id} title={task_name} key={id} checked={finished} />
         ))}
       </SortableContext>
     </DndContext>
