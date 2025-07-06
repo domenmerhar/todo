@@ -4,7 +4,12 @@ import { redirect } from "next/navigation";
 import { getSession } from "./auth";
 import { query } from "../db";
 import { DBResponse } from "../types/db";
-import { reorderTodo, ReorderTodoParams, toggleTask } from "../db/task";
+import {
+  deleteTask,
+  reorderTodo,
+  ReorderTodoParams,
+  toggleTask,
+} from "../db/task";
 
 export async function addTodo(
   _prevState: {
@@ -103,6 +108,22 @@ export async function toggleTaskAction(taskId: number): Promise<DBResponse> {
   } catch (error) {
     console.error("Error toggling task:", error);
     return { success: false, error: "Failed to toggle task" };
+  }
+
+  return { success: true };
+}
+
+export async function deleteTaskAction(taskId: number): Promise<DBResponse> {
+  const session = await getSession();
+
+  const userId = session?.user?.id;
+  if (!userId) throw new Error("User not authenticated");
+
+  try {
+    await deleteTask(taskId, userId);
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    return { success: false, error: "Failed to delete task" };
   }
 
   return { success: true };
