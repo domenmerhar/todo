@@ -1,4 +1,3 @@
-import "server-only";
 import { getClient, query } from ".";
 import { getSession } from "../actions/auth";
 import { DEV_PROMISE_DELAY } from "../constants";
@@ -209,15 +208,9 @@ export async function reorderTodo({
   }
 }
 
-export async function toggleTask(taskId: number) {
-  const session = await getSession();
-
-  const userId = session?.user?.id;
-  if (!userId) throw new Error("User not authenticated");
-
-  try {
-    await query(
-      `
+export async function toggleTask(taskId: number, userId: string) {
+  return await query(
+    `
       UPDATE "Task"
       SET finished = NOT finished
       WHERE id = $1
@@ -227,10 +220,6 @@ export async function toggleTask(taskId: number) {
         WHERE "user_id" = $2
       )
       `,
-      [taskId, userId]
-    );
-  } catch (error) {
-    console.error("Error toggling task:", error);
-    throw error;
-  }
+    [taskId, userId]
+  );
 }
