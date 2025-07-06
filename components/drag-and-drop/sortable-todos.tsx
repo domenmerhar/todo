@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useOptimistic, useState } from "react";
+import { startTransition, useEffect, useOptimistic, useState } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -30,7 +30,11 @@ export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
 
   const [optimisticTodos, updateOptimisticTodos] = useOptimistic(
     todos,
-    (state, payload: { type: "toggle" | "reorder" | "delete"; data: any }) => {
+    (
+      state,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      payload: { type: "toggle" | "reorder" | "delete" | "replace"; data: any }
+    ) => {
       switch (payload.type) {
         case "toggle":
           return state.map((task) =>
@@ -42,11 +46,20 @@ export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
           return arrayMove(state, payload.data.oldIndex, payload.data.newIndex);
         case "delete":
           return state.filter((task) => task.id !== payload.data);
+        case "replace":
+          return payload.data;
         default:
           return state;
       }
     }
   );
+
+  useEffect(() => {
+    setTodos(tasks);
+    startTransition(() => {
+      updateOptimisticTodos({ type: "replace", data: tasks });
+    });
+  }, [tasks, updateOptimisticTodos]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -56,7 +69,9 @@ export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
   );
 
   const handleToggle = async (taskId: number) => {
-    startTransition(() => updateOptimisticTodos(taskId));
+    startTransition(() =>
+      updateOptimisticTodos({ type: "reorder", data: taskId })
+    );
 
     setTodos((prev) =>
       prev.map((task) =>
@@ -79,6 +94,7 @@ export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
       const movedTask = todos[oldIndex];
 
       startTransition(() =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         updateOptimisticTodos({ oldIndex, newIndex } as any)
       );
       setTodos((prev) => arrayMove(prev, oldIndex, newIndex));
