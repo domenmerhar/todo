@@ -8,7 +8,7 @@ import { query } from "../db";
 import { revalidatePath } from "next/cache";
 
 export async function editUsername(
-  _prevState: { values: { username: string }; errors: string[] },
+  _prevState: { values: { username: string }; error: string },
   formData: FormData
 ) {
   const username = (formData.get("username") as string) || "";
