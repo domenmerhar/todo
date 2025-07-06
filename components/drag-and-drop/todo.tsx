@@ -7,7 +7,15 @@ import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { Grip } from "lucide-react";
 
-export function Todo({ title, id }: { title: string; id: number }) {
+export function Todo({
+  title,
+  id,
+  checked,
+}: {
+  title: string;
+  id: number;
+  checked?: boolean;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
@@ -23,7 +31,7 @@ export function Todo({ title, id }: { title: string; id: number }) {
       style={style}
     >
       <div className="flex items-center gap-4">
-        <Checkbox id={String(id)} />
+        <Checkbox id={String(id)} defaultChecked={checked} />
         <Label htmlFor={String(id)}>{title}</Label>
       </div>
       <Grip {...attributes} {...listeners} className="cursor-move" />
