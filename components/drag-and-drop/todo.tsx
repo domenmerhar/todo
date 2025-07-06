@@ -5,18 +5,21 @@ import React, { CSSProperties } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
-import { Grip } from "lucide-react";
+import { Grip, Trash } from "lucide-react";
+import { Button } from "../ui/button";
 
 export function Todo({
   title,
   id,
   checked,
   onCheck,
+  onDelete,
 }: {
   title: string;
   id: number;
-  checked?: boolean;
-  onCheck?: (id: number) => void;
+  checked: boolean;
+  onCheck: (id: number) => void;
+  onDelete: (id: number) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
@@ -40,7 +43,17 @@ export function Todo({
         />
         <Label htmlFor={String(id)}>{title}</Label>
       </div>
-      <Grip {...attributes} {...listeners} className="cursor-move" />
+
+      <div className="flex gap-4">
+        <Button
+          variant="destructive"
+          className="size-6"
+          onClick={onDelete.bind(null, id)}
+        >
+          <Trash />
+        </Button>{" "}
+        <Grip {...attributes} {...listeners} className="cursor-move" />
+      </div>
     </div>
   );
 }
