@@ -208,3 +208,29 @@ export async function reorderTodo({
     client.release();
   }
 }
+
+export async function toggleTask(taskId: number) {
+  const session = await getSession();
+
+  const userId = session?.user?.id;
+  if (!userId) throw new Error("User not authenticated");
+
+  try {
+    await query(
+      `
+      UPDATE "Task"
+      SET finished = NOT finished
+      WHERE id = $1
+      AND "group_id" IN (
+        SELECT id 
+        FROM "Group"
+        WHERE "user_id" = $2
+      )
+      `,
+      [taskId, userId]
+    );
+  } catch (error) {
+    console.error("Error toggling task:", error);
+    throw error;
+  }
+}
