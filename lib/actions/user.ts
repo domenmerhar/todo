@@ -5,6 +5,7 @@ import { auth } from "../auth";
 import { getSession } from "./auth";
 import { redirect } from "next/navigation";
 import { query } from "../db";
+import { revalidatePath } from "next/cache";
 
 export async function editUsername(
   _prevState: { values: { username: string }; errors: string[] },
@@ -34,6 +35,8 @@ export async function editUsername(
       values: { username },
     };
   }
+
+  revalidatePath("/home");
 
   return {
     success: true,
