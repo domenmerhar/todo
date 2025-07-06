@@ -13,7 +13,6 @@ export default function UserTaskGroupskeleton() {
             Icon={LoaderCircle}
             color={""}
             completedTasks={0}
-            description={""}
             title={""}
             totalTasks={0}
             className="animate-pulse bg-gray-200 text-transparent"
