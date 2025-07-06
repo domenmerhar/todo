@@ -194,7 +194,7 @@ export async function completeGroupTasks(groupId: number): Promise<DBResponse> {
   };
 }
 
-export async function deleteGroup(groupId: number): Promise<DBResponse> {
+export async function deleteGroup(groupId: number) {
   try {
     await query(
       `
@@ -204,15 +204,6 @@ export async function deleteGroup(groupId: number): Promise<DBResponse> {
       [groupId]
     );
   } catch (error) {
-    console.error("Error fetching group:", error);
-
-    return {
-      success: false,
-      error: "Failed to fetch group",
-    };
+    throw error;
   }
-
-  return {
-    success: true,
-  };
 }
