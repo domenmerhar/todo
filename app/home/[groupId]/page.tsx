@@ -14,20 +14,29 @@ export const metadata = {};
 
 const selectOptions = [
   { name: "All", value: "all" },
-  { name: "Done", value: "done" },
-  { name: "To Do", value: "todo" },
+  { name: "Unfinished", value: "unfinished" },
+  { name: "Finished", value: "finished" },
 ];
 
 export default async function GroupPage({
   params,
+  searchParams,
 }: {
-  params: Promise<{ groupId: string }>;
+  params: Promise<{
+    groupId: string;
+  }>;
+  searchParams: Promise<{
+    query?: string;
+    status?: "all" | "finished" | "unfinished";
+  }>;
 }) {
-  const { groupId } = await params;
-  const [data, session] = await Promise.all([
-    getGroupById(groupId),
+  const [{ groupId }, { query, status }, session] = await Promise.all([
+    params,
+    searchParams,
     getSession(),
   ]);
+
+  const data = await getGroupById(groupId);
 
   if (data.group?.public === false && data.group?.user_id !== session?.user?.id)
     redirect("/home");
@@ -47,7 +56,11 @@ export default async function GroupPage({
         </Suspense>
 
         <Suspense fallback={<SortableTodosSkeleton />} key={`${groupId} todos`}>
-          <SortableTodosHolder groupId={groupId} />
+          <SortableTodosHolder
+            groupId={groupId}
+            queryStr={query}
+            status={status}
+          />
         </Suspense>
       </div>
     </div>

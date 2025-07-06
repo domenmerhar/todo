@@ -1,13 +1,13 @@
 import React from "react";
 import { SortableTodos } from "./sortable-todos";
-import { getGroupTasks } from "@/lib/db/task";
+import { getGroupTasks, GetGroupTasksParams } from "@/lib/db/task";
 
 export default async function SortableTodosHolder({
   groupId,
-}: {
-  groupId: string;
-}) {
-  const res = await getGroupTasks(groupId);
+  queryStr,
+  status,
+}: GetGroupTasksParams) {
+  const res = await getGroupTasks({ groupId, queryStr, status });
 
   if (!res.success || !res.tasks)
     return (
