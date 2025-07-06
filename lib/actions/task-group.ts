@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 export async function addTodoGroup(
   _prevState: {
     success: boolean;
-    error: string[];
+    errors: string[];
     values: {
       name: string;
       icon: string;
@@ -44,21 +44,19 @@ export async function addTodoGroup(
       values: { name, icon, color, public: publicBool },
     };
 
+  let res;
+
   try {
-    query(
+    res = await query(
       `INSERT INTO "Group" (user_id, group_name, public, icon, color)
-      VALUES ($1, $2, $3, $4, $5);`,
+      VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
       [session.user.id, name, publicBool, icon, color]
     );
   } catch {
     errors.push("An error occurred while adding the task group.");
   }
 
-  return {
-    success: true,
-    errors,
-    values: { name, icon, color, public: publicBool },
-  };
+  redirect(`/home/${res?.rows[0].id}`);
 }
 
 export async function deleteGroupAction(id: number) {
