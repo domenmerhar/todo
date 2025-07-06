@@ -11,10 +11,12 @@ export function Todo({
   title,
   id,
   checked,
+  onCheck,
 }: {
   title: string;
   id: number;
   checked?: boolean;
+  onCheck?: (id: number) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
@@ -31,7 +33,11 @@ export function Todo({
       style={style}
     >
       <div className="flex items-center gap-4">
-        <Checkbox id={String(id)} defaultChecked={checked} />
+        <Checkbox
+          id={String(id)}
+          checked={checked}
+          onCheckedChange={() => onCheck?.(id)}
+        />
         <Label htmlFor={String(id)}>{title}</Label>
       </div>
       <Grip {...attributes} {...listeners} className="cursor-move" />

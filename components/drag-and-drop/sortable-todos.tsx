@@ -19,14 +19,17 @@ import {
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Task } from "@/lib/db/task";
 import { Todo } from "./todo";
-import { reorderTaskAction } from "@/lib/actions/todo";
+import { reorderTaskAction, toggleTaskAction } from "@/lib/actions/todo";
 
 export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
   const [todos, setTodos] = useState<Task[]>(tasks);
 
   const [optimisticTodos, updateOptimisticTodos] = useOptimistic(
-    tasks,
-    (state, { oldIndex, newIndex }) => arrayMove(state, oldIndex, newIndex)
+    todos,
+    (state, taskId) =>
+      state.map((task) =>
+        task.id === taskId ? { ...task, finished: !task.finished } : task
+      )
   );
 
   const sensors = useSensors(
@@ -36,17 +39,33 @@ export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
     })
   );
 
+  const handleToggle = async (taskId: number) => {
+    startTransition(() => updateOptimisticTodos(taskId));
+
+    setTodos((prev) =>
+      prev.map((task) =>
+        task.id === taskId ? { ...task, finished: !task.finished } : task
+      )
+    );
+
+    try {
+      await toggleTaskAction(taskId);
+    } catch (error) {
+      console.error("Failed to toggle task:", error);
+      // Optional: rollback state or show toast error
+    }
+  };
+
   async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-
     if (over && active.id !== over.id) {
       const oldIndex = todos.findIndex((item) => item.id === active.id);
       const newIndex = todos.findIndex((item) => item.id === over.id);
-
       const movedTask = todos[oldIndex];
 
-      startTransition(() => updateOptimisticTodos({ oldIndex, newIndex }));
-
+      startTransition(() =>
+        updateOptimisticTodos({ oldIndex, newIndex } as any)
+      );
       setTodos((prev) => arrayMove(prev, oldIndex, newIndex));
 
       await reorderTaskAction({
@@ -70,7 +89,13 @@ export const SortableTodos = ({ tasks }: { tasks: Task[] }) => {
         strategy={verticalListSortingStrategy}
       >
         {optimisticTodos.map(({ id, task_name, finished }) => (
-          <Todo id={id} title={task_name} key={id} checked={finished} />
+          <Todo
+            key={id}
+            id={id}
+            title={task_name}
+            checked={finished}
+            onCheck={handleToggle}
+          />
         ))}
       </SortableContext>
     </DndContext>
