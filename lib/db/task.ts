@@ -8,7 +8,7 @@ export interface Task {
   id: number;
   group_id: number;
   task_name: string;
-  finsihed: boolean;
+  finished: boolean;
 }
 
 interface GetUserTaskCompletionRateResponse extends DBResponse {
@@ -97,21 +97,48 @@ export async function getUserTaskCount(): Promise<GetUserTaskCountResponse> {
   };
 }
 
+export interface GetGroupTasksParams {
+  groupId: string;
+  queryStr?: string;
+  status?: "all" | "finished" | "unfinished";
+}
 interface GetGroupTasksResponse extends DBResponse {
   tasks?: Task[];
 }
 
-export async function getGroupTasks(
-  groupId: string
-): Promise<GetGroupTasksResponse> {
-  await new Promise((resolve) => setTimeout(resolve, DEV_PROMISE_DELAY)); // Simulate delay
+export async function getGroupTasks({
+  groupId,
+  queryStr,
+  status,
+}: GetGroupTasksParams): Promise<GetGroupTasksResponse> {
   let res;
 
   try {
-    res = await query(
-      `SELECT * FROM "Task" WHERE group_id = $1 ORDER BY "order"`,
-      [groupId]
-    );
+    if (queryStr)
+      res = await query(
+        `
+        SELECT * 
+        FROM "Task"
+        WHERE group_id = $1
+        AND LOWER(task_name) LIKE $2
+        ${status === "finished" ? "AND finished = true" : ""}
+        ${status === "unfinished" ? "AND finished = false" : ""}
+        ORDER BY "order"
+        `,
+        [groupId, `%${queryStr.toLowerCase()}%`]
+      );
+    else
+      res = await query(
+        `
+      SELECT * 
+      FROM "Task"
+      WHERE group_id = $1
+      ${status === "finished" ? "AND finished = true" : ""}
+      ${status === "unfinished" ? "AND finished = false" : ""}
+      ORDER BY "order"
+      `,
+        [groupId]
+      );
   } catch (error) {
     console.error("Error fetching group tasks:", error);
     return { success: false, error: "Failed to fetch group tasks" };
