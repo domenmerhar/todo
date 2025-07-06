@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useActionState } from "react";
+import React, { useActionState, useEffect } from "react";
 import {
   DialogContent,
   DialogFooter,
@@ -11,7 +11,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { addTodo } from "@/lib/actions/todo";
 import Form from "next/form";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import ErrorList from "../error-list";
 import ModalPendingButtons from "./modal-pending-buttons";
 import useToastTrue from "@/lib/hooks/use-toast-true";
@@ -25,8 +25,17 @@ export default function AddTodoModal() {
       groupId: "",
     },
   });
+  const router = useRouter();
 
   useToastTrue(state.success, "Todo added successfully!");
+
+  useEffect(() => {
+    console.log(state.success);
+    if (state.success) {
+      router.refresh();
+      router.push(`/home/${state.values.groupId}`);
+    }
+  }, [state, router]);
 
   const { groupId } = useParams();
 
