@@ -1,6 +1,5 @@
 import { getClient, query } from ".";
 import { getSession } from "../actions/auth";
-import { DEV_PROMISE_DELAY } from "../constants";
 import { DBResponse } from "../types/db";
 
 export interface Task {
@@ -15,8 +14,6 @@ interface GetUserTaskCompletionRateResponse extends DBResponse {
 }
 
 export async function getUserTaskCompletionRate(): Promise<GetUserTaskCompletionRateResponse> {
-  await new Promise((resolve) => setTimeout(resolve, DEV_PROMISE_DELAY));
-
   const session = await getSession();
   if (!session?.user?.id)
     return { success: false, error: "User not authenticated" };
@@ -65,8 +62,6 @@ interface GetUserTaskCountResponse extends DBResponse {
 }
 
 export async function getUserTaskCount(): Promise<GetUserTaskCountResponse> {
-  await new Promise((resolve) => setTimeout(resolve, DEV_PROMISE_DELAY));
-
   const session = await getSession();
   if (!session?.user?.id)
     return { success: false, error: "User not authenticated" };
@@ -222,4 +217,49 @@ export async function toggleTask(taskId: number, userId: string) {
       `,
     [taskId, userId]
   );
+}
+
+export async function deleteTask(taskId: number, userId: string) {
+  const client = await getClient();
+
+  try {
+    client.query(`BEGIN`);
+
+    const res = await client.query(
+      `
+      DELETE FROM "Task"
+      WHERE id = $1
+      AND "group_id" IN (
+        SELECT id 
+        FROM "Group"
+        WHERE "user_id" = $2
+      )
+      RETURNING *
+      `,
+      [taskId, userId]
+    );
+
+    const order = res.rows[0].order;
+
+    await client.query(
+      `
+      UPDATE "Task"
+      SET "order" = "order" - 1
+      WHERE "group_id" IN (
+        SELECT id 
+        FROM "Group"
+        WHERE "user_id" = $2
+      )
+      AND "order" > $1;
+      `,
+      [order, userId]
+    );
+
+    client.query(`COMMIT`);
+  } catch (error) {
+    client.query(`ROLLBACK`);
+    throw error;
+  } finally {
+    client.release();
+  }
 }
