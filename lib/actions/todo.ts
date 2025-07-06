@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "./auth";
 import { query } from "../db";
 import { DBResponse } from "../types/db";
-import { reorderTodo, ReorderTodoParams } from "../db/task";
+import { reorderTodo, ReorderTodoParams, toggleTask } from "../db/task";
 
 export async function addTodo(
   _prevState: {
@@ -87,6 +87,22 @@ export async function reorderTaskAction({
   } catch (error) {
     console.error("Error reordering task:", error);
     return { success: false, error: "Failed to reorder task" };
+  }
+
+  return { success: true };
+}
+
+export async function toggleTaskAction(taskId: number): Promise<DBResponse> {
+  const session = await getSession();
+
+  const userId = session?.user?.id;
+  if (!userId) throw new Error("User not authenticated");
+
+  try {
+    await toggleTask(taskId, userId);
+  } catch (error) {
+    console.error("Error toggling task:", error);
+    return { success: false, error: "Failed to toggle task" };
   }
 
   return { success: true };
