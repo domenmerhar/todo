@@ -17,6 +17,7 @@ export default async function UserTaskGroups() {
           group_name,
           icon,
           color,
+          public: isPublic,
           completed_tasks,
           total_tasks,
         }) => {
@@ -31,6 +32,7 @@ export default async function UserTaskGroups() {
                 color={color}
                 Icon={iconValue}
                 completedTasks={completed_tasks}
+                isPublic={isPublic}
                 title={group_name}
                 totalTasks={total_tasks}
               />

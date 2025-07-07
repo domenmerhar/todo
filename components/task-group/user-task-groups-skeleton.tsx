@@ -14,6 +14,7 @@ export default function UserTaskGroupskeleton() {
             color={""}
             completedTasks={0}
             title={""}
+            isPublic={false}
             totalTasks={0}
             className="animate-pulse bg-gray-200 text-transparent"
           />
