@@ -7,10 +7,14 @@ import SearchBar from "@/components/searchbar";
 import { SelectParam } from "@/components/select-param";
 import { getSession } from "@/lib/actions/auth";
 import { getGroupById } from "@/lib/db/group";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export const metadata = {};
+export const metadata: Metadata = {
+  title: "Group",
+  description: "Manage your group tasks efficiently",
+};
 
 const selectOptions = [
   { name: "All", value: "all" },
