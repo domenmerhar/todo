@@ -1,4 +1,4 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { cookies } from "next/headers";
@@ -21,7 +21,7 @@ export default async function HomeLayout({
       <SidebarProvider defaultOpen={defaultOpen} className="inline-block">
         <header className="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center space-x-2">
-            <CheckCircle2 className="h-8 w-8 text-blue-600" />
+            <CheckCircle className="h-8 w-8 text-blue-600" />
             <h1 className="text-2xl font-bold text-gray-900">TodoGroups</h1>
 
             <SidebarCustomTrigger className="size-10 ml-auto md:hidden" />
