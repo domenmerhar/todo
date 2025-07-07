@@ -1,4 +1,4 @@
-import { Check, Eye, Trash } from "lucide-react";
+import { Check, Eye, KeyRound, Lock, Trash } from "lucide-react";
 import React from "react";
 import { ContextMenuContent, ContextMenuItem } from "../ui/context-menu";
 import {
@@ -7,26 +7,40 @@ import {
 } from "@/lib/actions/task-group";
 import Link from "next/link";
 
-export default function ContextMenuList({ id }: { id: number }) {
+export default function ContextMenuList({
+  id,
+  isPublic,
+}: {
+  id: number;
+  isPublic: boolean;
+}) {
   return (
-    <ContextMenuContent>
+    <ContextMenuContent className="*:cursor-pointer">
       <Link href={`/home/${id}`}>
-        <ContextMenuItem className="cursor-pointer">
+        <ContextMenuItem>
           <Eye /> View
         </ContextMenuItem>
       </Link>
 
-      <ContextMenuItem
-        onClick={completeGroupTasksAction.bind(null, id)}
-        className="cursor-pointer"
-      >
+      <ContextMenuItem onClick={completeGroupTasksAction.bind(null, id)}>
         <Check /> Complete all tasks
+      </ContextMenuItem>
+
+      <ContextMenuItem>
+        {isPublic ? (
+          <>
+            <Lock /> Change to private
+          </>
+        ) : (
+          <>
+            <KeyRound /> Change to public
+          </>
+        )}
       </ContextMenuItem>
 
       <ContextMenuItem
         variant="destructive"
         onClick={deleteGroupAction.bind(null, id)}
-        className="cursor-pointer"
       >
         <Trash /> Delete group
       </ContextMenuItem>
