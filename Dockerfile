@@ -1,6 +1,5 @@
-# Install deps and build
+# Builder stage
 FROM node:24-alpine AS builder
-RUN apk add --no-cache g++ make py3-pip libc6-compat
 WORKDIR /app
 
 COPY package*.json ./
@@ -9,7 +8,7 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Production image
+# Production stage
 FROM node:24-alpine AS production
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
