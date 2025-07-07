@@ -16,6 +16,7 @@ export default function TaskGroup({
   title,
   totalTasks,
   id,
+  isPublic,
   className,
 }: {
   Icon: React.ComponentType;
@@ -24,6 +25,7 @@ export default function TaskGroup({
   totalTasks: number;
   completedTasks: number;
   id: number;
+  isPublic: boolean;
   className?: string;
 }) {
   const completionPercentage =
@@ -55,7 +57,7 @@ export default function TaskGroup({
                   <Eye className="p-1.5" />
                 </Button>
               </Link>
-              <ContextMenuList id={id} />
+              <ContextMenuList id={id} isPublic={isPublic} />
             </div>
           </CardHeader>
 
