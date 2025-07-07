@@ -15,28 +15,11 @@ export default async function GroupStatistics() {
       getUserIncompletedGroups(),
     ]);
 
-  if (
-    !taskCount.success ||
-    !completionRate.success ||
-    !completedGroups.success ||
-    !incompletedGroups.success ||
-    !taskCount.count ||
-    !completionRate.completionRate ||
-    !completedGroups.completedGroups ||
-    !incompletedGroups.incompletedGroups
-  ) {
-    return (
-      <div className="text-red-500">
-        Error loading statistics. Please try again later.
-      </div>
-    );
-  }
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
       <StatisticCard
         title="Total Tasks"
-        content={taskCount.count}
+        content={taskCount?.count || 0}
         contentDescription="Across all groups"
       />
 
@@ -48,13 +31,13 @@ export default async function GroupStatistics() {
 
       <StatisticCard
         title="Completed Groups"
-        content={completedGroups.completedGroups}
+        content={completedGroups?.completedGroups || 0}
         contentDescription="Groups with all tasks completed"
       />
 
       <StatisticCard
         title="Incompleted Groups"
-        content={incompletedGroups.incompletedGroups}
+        content={incompletedGroups?.incompletedGroups || 0}
         contentDescription="Groups with unfinished tasks"
       />
     </div>
