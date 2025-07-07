@@ -100,6 +100,7 @@ interface GetUserGroupsResponse extends DBResponse {
     group_name: string;
     icon: string;
     color: string;
+    public: boolean;
     completed_tasks: number;
     total_tasks: number;
     completion_percentage: number;
@@ -120,6 +121,7 @@ export async function getUserGroups(): Promise<GetUserGroupsResponse> {
           g.group_name,
           g.icon,
           g.color,
+          g.public,
           COUNT(CASE WHEN t.finished THEN 1 END) AS completed_tasks,
           COUNT(t.id) AS total_tasks
       FROM "Group" g
@@ -206,4 +208,20 @@ export async function deleteGroup(groupId: number) {
   } catch (error) {
     throw error;
   }
+}
+
+export function toggleGroupPublicAccess(groupId: number, userId: string) {
+  return query(
+    `
+    UPDATE "Group"
+    SET public = NOT public
+    WHERE id = $1
+    AND id IN (
+        SELECT "id"
+        FROM "Group"
+        WHERE "user_id" = $2
+    )
+    `,
+    [groupId, userId]
+  );
 }
