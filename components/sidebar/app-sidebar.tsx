@@ -26,14 +26,13 @@ export async function AppSidebar() {
   if (!session?.user) return null;
 
   const resName = await getName();
-  console.log({ resName });
   if (!resName.name || resName.error) return null;
 
   const shortName =
     resName.name[0].toUpperCase() +
     resName.name
       .slice(1)
-      .replaceAll(/[aeiou]/gi, "")
+      .replaceAll(/[aeiou\s]/gi, "")
       .slice(0, 1)
       .toUpperCase();
 

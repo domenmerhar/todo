@@ -30,7 +30,6 @@ export default function AddTodoModal() {
   useToastTrue(state.success, "Todo added successfully!");
 
   useEffect(() => {
-    console.log(state.success);
     if (state.success) {
       router.refresh();
       router.push(`/home/${state.values.groupId}`);
