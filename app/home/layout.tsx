@@ -4,6 +4,7 @@ import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { cookies } from "next/headers";
 import { SidebarCustomTrigger } from "@/components/sidebar/sidebar-custom-trigger";
 import { NavigationBreadcrumb } from "@/components/navigation-breadcrumbs";
+import { getSession } from "@/lib/actions/auth";
 
 export default async function HomeLayout({
   children,
@@ -12,6 +13,8 @@ export default async function HomeLayout({
 }) {
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+
+  const isAuthenticated = !!(await getSession());
 
   return (
     <>
@@ -27,7 +30,8 @@ export default async function HomeLayout({
 
         <div className="flex">
           <main className="min-w-sm max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <NavigationBreadcrumb className="mb-6" /> {children}
+            {isAuthenticated && <NavigationBreadcrumb className="mb-6" />}{" "}
+            {children}
           </main>
 
           <AppSidebar />
