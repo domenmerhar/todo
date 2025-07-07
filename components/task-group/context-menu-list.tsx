@@ -4,6 +4,7 @@ import { ContextMenuContent, ContextMenuItem } from "../ui/context-menu";
 import {
   completeGroupTasksAction,
   deleteGroupAction,
+  toggleGroupPublicAccessAction,
 } from "@/lib/actions/task-group";
 import Link from "next/link";
 
@@ -26,7 +27,7 @@ export default function ContextMenuList({
         <Check /> Complete all tasks
       </ContextMenuItem>
 
-      <ContextMenuItem>
+      <ContextMenuItem onClick={toggleGroupPublicAccessAction.bind(null, id)}>
         {isPublic ? (
           <>
             <Lock /> Change to private
