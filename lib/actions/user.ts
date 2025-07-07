@@ -6,6 +6,7 @@ import { getSession } from "./auth";
 import { redirect } from "next/navigation";
 import { query } from "../db";
 import { revalidatePath } from "next/cache";
+import { DBResponse } from "../types/db";
 
 export async function editUsername(
   _prevState: { values: { username: string }; error: string },
@@ -38,11 +39,7 @@ export async function editUsername(
 
   revalidatePath("/home");
 
-  return {
-    success: true,
-    error: "",
-    values: { username },
-  };
+  redirect("/sign-in");
 }
 
 export async function changePassword(
@@ -86,5 +83,33 @@ export async function changePassword(
     success: true,
     errors: [],
     values: { password, newPassword },
+  };
+}
+
+interface GetNameResponse extends DBResponse {
+  name?: string;
+}
+
+export async function getName(): Promise<GetNameResponse> {
+  const session = await getSession();
+  if (!session?.user.id) return { success: false, error: "User not found" };
+
+  let res;
+
+  try {
+    res = await query(`SELECT name FROM "user" WHERE id = $1`, [
+      session.user.id,
+    ]);
+
+    if (res.rows.length === 0)
+      return { success: false, error: "User not found" };
+  } catch (error) {
+    console.error("Error fetching user name:", error);
+    return { success: false, error: "Failed to fetch user name" };
+  }
+
+  return {
+    success: true,
+    name: res.rows[0].name,
   };
 }
