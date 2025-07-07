@@ -19,14 +19,20 @@ import { EditUsernameModal } from "../modal/edit-username-modal";
 import EditPasswordModal from "../modal/edit-password-modal";
 import { Button } from "../ui/button";
 import { getSession, signOut } from "@/lib/actions/auth";
+import { getName } from "@/lib/actions/user";
 
 export async function AppSidebar() {
   const session = await getSession();
+  if (!session?.user) return null;
 
-  const name = session?.user?.name || "Username";
+  const resName = await getName();
+  console.log({ resName });
+  if (!resName.name || resName.error) return null;
+
   const shortName =
-    name[0].toUpperCase() +
-    name
+    resName.name[0].toUpperCase() +
+    resName.name
+      .slice(1)
       .replaceAll(/[aeiou]/gi, "")
       .slice(0, 1)
       .toUpperCase();
@@ -37,7 +43,7 @@ export async function AppSidebar() {
         <SidebarRail />
         <SidebarHeader>
           <SidebarTrigger tooltipContent="Username">
-            <Avatar variant="large">{shortName}</Avatar> {name}
+            <Avatar variant="large">{shortName}</Avatar> {resName.name}
           </SidebarTrigger>
           <SidebarSeparator className="my-2" />
         </SidebarHeader>
