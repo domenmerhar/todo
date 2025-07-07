@@ -3,7 +3,11 @@
 import { redirect } from "next/navigation";
 import { query } from "../db";
 import { getSession } from "./auth";
-import { completeGroupTasks, deleteGroup } from "../db/group";
+import {
+  completeGroupTasks,
+  deleteGroup,
+  toggleGroupPublicAccess,
+} from "../db/group";
 import { revalidatePath } from "next/cache";
 
 export async function addTodoGroup(
@@ -79,4 +83,18 @@ export async function completeGroupTasksAction(id: number) {
   }
 
   revalidatePath("/home");
+}
+
+export async function toggleGroupPublicAccessAction(groupId: number) {
+  const session = await getSession();
+  if (!session?.user) redirect("/sign-in");
+
+  try {
+    await toggleGroupPublicAccess(groupId, session.user.id);
+  } catch (error) {
+    console.error("Error toggling group public access:", error);
+    return;
+  }
+
+  revalidatePath(`/home`);
 }
