@@ -1,18 +1,23 @@
 services:
   app:
     build: .
+    image: todo-app
     ports:
       - "3000:3000"
-    image: todo-app
     environment:
       - DATABASE_URL=${DATABASE_URL}
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
 
   db:
-    image: postgres:15
+    image: postgres:16-alpine
+    platform: linux/amd64
     restart: always
     environment:
       POSTGRES_HOST: ${POSTGRES_HOST_PROD}
@@ -25,6 +30,17 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres-data:
+
+networks:
+  app-network:
+    driver: bridge
